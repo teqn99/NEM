@@ -1,0 +1,369 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+
+{% comment %} {% block content %} {% endcomment %}
+{% block whole_review_form %}
+
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Star Rating Form | CodingNepal</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <!-- half-star-rating위한 fontawesome cdn -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+
+    
+    <style>
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+{% comment %} *{
+  /* margin: 0;
+  padding: 0; */
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+} {% endcomment %}
+{% comment %} html,body{
+  display: grid;
+  height: 100%;
+  place-items: center;
+  text-align: center;
+  background: #000;
+  color: #333
+} {% endcomment %}
+body{
+  {% comment %} background: #666; {% endcomment %}
+  background:#0A0A0A;
+  color: #333;
+}
+
+section2{
+  {% comment %} background: #999; {% endcomment %}
+  background: #000;
+  width: 1000px;
+  {% comment %} height: 100%; {% endcomment %}
+  {% comment %} height:1000px; {% endcomment %}
+  height:100%;
+}
+
+.errorlist {
+  font-size: 20px;
+}
+
+.container2{
+  /* position: relative; */
+  position: absolute;
+  /* top: 25%; */
+  top:150px;
+  /* width: 400px; */
+  /* width: 700px; */
+  {% comment %} width: 800px; {% endcomment %}
+  {% comment %} width: 900px; {% endcomment %}
+  width: 800px;
+  height: 700px;
+  background: #111;
+  padding: 20px 30px;
+  border: 1px solid #444;
+  /* border-radius: 5px; */
+  border-radius: 8px;
+  position-bottom: 50px;
+  display: flex;
+  margin:auto;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.container2 .post{
+  display: none;
+}
+.container2 .text{
+  font-size: 25px;
+  color: #666;
+  font-weight: 500;
+}
+/* .container2 .edit{
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  font-size: 16px;
+  color: #666;
+  font-weight: 500;
+  cursor: pointer;
+} */
+/* .container2 .edit:hover{
+  text-decoration: underline;
+}
+.container2 .star-widget input{
+  display: none;
+} */
+.star-widget label{
+  font-size: 40px;
+  color: #444;
+  padding: 10px;
+  float: right;
+  transition: all 0.2s ease;
+}
+
+/* input:not(:checked) ~ label:hover, */
+/* input:not(:checked) ~ label:hover ~ label{ */
+  /* color: #fd4; */
+/* } */
+input:checked ~ label{
+  /* color: #fd4; */
+}
+input#rate-5:checked ~ label{
+  /* color: #fe7; */
+  text-shadow: 0 0 20px #952;
+}
+#rate-1:checked ~ form header:before{
+  /* content: "I just hate it "; */
+}
+#rate-2:checked ~ form header:before{
+  /* content: "I don't like it "; */
+}
+#rate-3:checked ~ form header:before{
+  /* content: "It is awesome "; */
+}
+#rate-4:checked ~ form header:before{
+  /* content: "I just like it "; */
+}
+#rate-5:checked ~ form header:before{
+  /* content: "I just love it "; */
+}
+
+#rating10:checked ~ form header:before{
+  content: "I just love it ";
+}
+
+
+.container2 form{
+    display:block;
+    width: 90%;
+}
+/* .container2 form{
+  display: none;
+} */
+input:checked ~ form{
+  /* display: block; */
+}
+form header{
+  width: 100%;
+  font-size: 25px;
+  color: #fe7;
+  font-weight: 500;
+  margin: 5px 0 20px 0;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+form .textarea{
+  /* height: 100px; */
+  height: 200px;
+  font-size: 30px;
+  font-weight: 700;
+  width: 100%;
+  margin-bottom: 30px;
+  overflow: hidden;
+}
+form .textarea textarea{
+  height: 100%;
+  width: 100%;
+  outline: none;
+  color: #eee;
+  border: 1px solid #333;
+  background: #222;
+  padding: 10px;
+  /* font-size: 17px; */
+  font-size: 25px;
+  resize: none;
+}
+.textarea textarea:focus{
+  border-color: #444;
+}
+form .btn{
+  /* height: 45px; */
+  height: 55px;
+  width: 100%;
+  margin: 15px 0;
+}
+/* POST버튼 디자인 */
+form .btn button{
+  height: 100%;
+  width: 100%;
+  border: 1px solid #444;
+  outline: none;
+  background: #222;
+  color: #999;
+  /* font-size: 17px; */
+  font-size: 25px;
+  font-weight: 500;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button2{
+  height: 100%;
+  width: 100%;
+  border: 1px solid #444;
+  outline: none;
+  background: #222;
+  color: #999;
+  /* font-size: 17px; */
+  font-size: 25px;
+  font-weight: 500;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+form .btn button:hover{
+  background: #1b1b1b;
+}
+
+/* half-star-rating------------------------ */
+/* body {
+        margin: 5%; 
+        text-align: center;
+        background: #111;
+        color: #333; 
+    } */
+    h1 {
+        font-size: 2em; 
+        margin-bottom: .5rem;
+    }
+
+    /* Ratings widget */
+    .rate {
+        display: inline-block;
+        border: 0;
+    }
+    /* Hide radio */
+    .rate > input {
+        display: none;
+    }
+    /* Order correctly by floating highest to the right */
+    .rate > label {
+        float: right;
+    }
+    /* The star of the show */
+    .rate > label:before {
+        display: inline-block;
+        /* font-size: 2rem; */
+        font-size: 4rem;
+        padding: .3rem .2rem;
+        margin: 0;
+        cursor: pointer;
+        font-family: "Font Awesome\ 5 free";
+        /* font-style: normal;
+        font-weight: normal; */
+        content: "\f005"; /* full star */
+    }
+
+    /* Half star trick */
+    .rate .half:before {
+        font-family: "Font Awesome\ 5 free";
+        /* font-style: normal;
+        font-weight: normal; */
+        content: "\f089"; /* half star no outline */
+        position: absolute;
+        padding-right: 0;
+    }
+    /* Click + hover color */
+    input:checked ~ label, /* color current and previous stars on checked */
+    label:hover, label:hover ~ label { color: #73B100;  } /* color previous stars on hover */
+
+    /* Hover highlights */
+
+    
+    input:checked + label:hover, input:checked ~ label:hover, 
+    input:checked ~ label:hover ~ label, /* highlight previous selected stars for new rating */
+    label:hover ~ input:checked ~ label /* highlight previous selected stars */ { color: #A6E72D;  } 
+
+
+    </style>
+
+  </head>
+  
+
+  <body>
+
+
+  {% comment %} <section2 class="card m-auto h-100"> {% endcomment %}
+      <div class="container2">
+
+          {% comment %} <h1 class="display-3 fw-bold">Half Star Rating</h1> {% endcomment %}
+          <h1 class="display-3 fw-bold">A Review By {{user.username}}</h1>
+
+          <form method="post">
+            {% csrf_token %}
+            <section class="d-flex justify-content-center">
+              <fieldset class="rate">
+                {% comment %} <input type="number" class="form-control" id="{{ form.score.id_for_label }}" name="{{ form.score.html_name }}" placeholder="Password"> {% endcomment %}
+                {% comment %} input의 id와 label의 for가 연결 {% endcomment %}
+                <input type="radio" id="rating10" name="{{ form.score.html_name }}" value="10" /><label for="rating10" title="5 stars"></label>
+                <input type="radio" id="rating9" name="{{ form.score.html_name }}" value="9" /><label class="half" for="rating9" title="4 1/2 stars"></label>
+                <input type="radio" id="rating8" name="{{ form.score.html_name }}" value="8" /><label for="rating8" title="4 stars"></label>
+                <input type="radio" id="rating7" name="{{ form.score.html_name }}" value="7" /><label class="half" for="rating7" title="3 1/2 stars"></label>
+                <input type="radio" id="rating6" name="{{ form.score.html_name }}" value="6" /><label for="rating6" title="3 stars"></label>
+                <input type="radio" id="rating5" name="{{ form.score.html_name }}" value="5" /><label class="half" for="rating5" title="2 1/2 stars"></label>
+                <input type="radio" id="rating4" name="{{ form.score.html_name }}" value="4" /><label for="rating4" title="2 stars"></label>
+                <input type="radio" id="rating3" name="{{ form.score.html_name }}" value="3" /><label class="half" for="rating3" title="1 1/2 stars"></label>
+                <input type="radio" id="rating2" name="{{ form.score.html_name }}" value="2" /><label for="rating2" title="1 star"></label>
+                <input type="radio" id="rating1" name="{{ form.score.html_name }}" value="1" /><label class="half" for="rating1" title="1/2 star"></label>
+                {% comment %} 에러메시지 추가 {% endcomment %}
+                {{ form.score.errors }}
+                <h3 class="text-align-end">Score Before You Edit : {{form.score.value}} / 10</h3>
+              </fieldset>
+          </section>
+
+              <header></header>
+            <br>
+
+            <div class="textarea">
+              <label2>Movie Title : {{movie_title}}({{release_year}})</label2><br>
+              <label2 for="{{ form.content.id_for_label }}">Review Content</label2>
+              {% comment %} <textarea cols="30" id="{{ form.content.id_for_label }}" name="{{ form.content.html_name }}" placeholder="Describe your experience.."></textarea> {% endcomment %}
+              {% comment %} <textarea cols="30" id="{{ form.content.id_for_label }}" name="{{ form.content.html_name }}" placeholder="Write your review here.."></textarea> {% endcomment %}
+              <textarea cols="30" id="{{ form.content.id_for_label }}" name="{{ form.content.html_name }}">{{form.content.value}}</textarea>
+              {{ form.content.errors }}
+              
+            </div>
+            <div class="btn" style="padding:0px; border:0px">
+              <button type="submit">Post</button>
+            </div>
+
+            <div class="btn mt-0" style="padding:0px; border:0px">
+              <button style=""><a class="container-fluid" href="{% url 'movies:detail' movie_pk %}" style="text-decoration:none; color: #999;">CANCEL</a></button>
+            </div>
+
+          </form>
+
+
+        </div>
+      </div>
+  {% comment %} </section2> {% endcomment %}
+
+    <script>
+    </script>
+  </body>
+</html>
+
+
+
+{% comment %} rivew_create 폼  {% endcomment %}
+{% comment %} <form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="{{ form.content.id_for_label }}">Review Content:</label>
+        <input type="text" class="form-control" id="{{ form.content.id_for_label }}" name="{{ form.content.html_name }}" placeholder="username">
+    </div>
+    <div class="form-group">
+        <label for="{{ form.score.id_for_label }}">Score:</label>
+        <input type="number" class="form-control" id="{{ form.score.id_for_label }}" name="{{ form.score.html_name }}" placeholder="Password">
+    </div>
+    <button type="submit">POST</button>
+</form> {% endcomment %}
+
+{% comment %} {% endblock %} {% endcomment %}
+{% endblock whole_review_form %}

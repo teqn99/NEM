@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        {% comment %} @import url('https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap');
+        *{
+          font-family: 'Poppins', sans-serif;
+        } {% endcomment %}
+
+        @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+        .carousel-container3 {
+        {% comment %} width: 1280px; WishMovies라는 부모카드 밖으로 빠져나와버림. w-100하고 이걸 없앰{% endcomment %}
+        margin: 50px auto;
+        min-height: 200px;
+        position: relative;
+        }
+        @media screen and (max-width: 768px) {
+        .carousel-container3 {
+            width: 80%;
+        }
+        }
+        @media screen and (max-width: 1024px) {
+        .carousel-container3 {
+            width: 85%;
+        }
+        }
+        .carousel-container3 .carousel-inner {
+        overflow: hidden;
+        }
+        .carousel-container3 .track3 {
+        display: inline-flex;
+        transition: transform 0.5s;
+        }
+        .carousel-container3 .carocard-container3 {
+        width: 259px;
+        flex-shrink: 0;
+        {% comment %} height: 250px; {% endcomment %}
+        {% comment %} height 커스텀 {% endcomment %}
+        height:400px;
+        padding-right: 15px;
+        box-sizing: border-box;
+        }
+        .carousel-container3 .carocard-container3 .carocard {
+        width: 100%;
+        height: 100%;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        }
+        .nav1 button {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: 1px solid #aaa;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        }
+        .nav1 .prev3 {
+        left: -30px;
+        display: none;
+        }
+        .nav1 .prev3.show {
+        display: block;
+        }
+        .nav1 .next3 {
+        right: -30px;
+        }
+        .nav1 .next3.hide {
+        display: none;
+        }
+
+        .carocard > * {
+        flex: 1;
+        }
+        .carocard .img {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 30px;
+        }
+        .carocard .info {
+        flex-basis: 40px;
+        {% comment %} height 커스텀 {% endcomment %}
+        height:400px;
+        background: #333;
+        color: #fff;
+        flex-grow: 0;
+        padding: 10px;
+        box-sizing: border-box;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="carousel-container3 w-100">
+        <div class="carousel-inner">
+          <div class="track3">
+            {% comment %} 반복 {% endcomment %}
+            {% for movie in person.like_movies.all %}
+            <section class="d-flex flex-column justify-content-around">
+              <div class="carocard-container3">
+                <div class="carocard">
+                  {% comment %} 1 {% endcomment %}
+                  <div class="img">
+                    {% comment %} height커스터마이징 {% endcomment %}
+                    <img height=350 src="https://image.tmdb.org/t/p/w500/{{ movie.poster_path }}" class="card-img-top" alt="movie image">
+                    <img src="" alt="">
+                  </div>
+                  {% comment %} 2 {% endcomment %}
+                  <div class="info d-flex justify-content-center align-items-center">
+                    <a href="{% url 'movies:detail' movie.pk %}"style="text-decoration:none; color:white; text-align:center;">{{ movie.title }}</a>
+                  </div>
+                </div>
+              </div>
+            </section>
+            {% endfor %}
+            {% comment %} 반복 끝{% endcomment %}
+          </div>
+        </div>
+        <div class="nav1">
+          <button class="prev3">
+            <i class="material-icons">
+            keyboard_arrow_left
+            </i>
+          </button>
+          <button class="next3">
+            <i class="material-icons">
+            keyboard_arrow_right
+            </i>
+          </button>
+        </div>
+      </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+const prev3  = document.querySelector('.prev3');
+const next3 = document.querySelector('.next3');
+
+const track3 = document.querySelector('.track3');
+
+let carouselWidth3 = document.querySelector('.carousel-container3').offsetWidth;
+
+window.addEventListener('resize', () => {
+  carouselWidth3 = document.querySelector('.carousel-container3').offsetWidth;
+})
+
+let index3 = 0;
+
+next3.addEventListener('click', () => {
+  index3++;
+  prev3.classList.add('show');
+  track3.style.transform = `translateX(-${index3 * carouselWidth3}px)`;
+  
+  if (track3.offsetWidth - (index3 * carouselWidth3) < carouselWidth3) {
+    next3.classList.add('hide');
+  }
+})
+
+prev3.addEventListener('click', () => {
+  index3--;
+  next3.classList.remove('hide');
+  if (index3 === 0) {
+    prev3.classList.remove('show');
+  }
+  track3.style.transform = `translateX(-${index3 * carouselWidth3}px)`;
+})
+
+
+</script>
+
+</body>
+
+
+
+</html>

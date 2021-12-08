@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+        .carousel-container {
+        {% comment %} width: 1280px; {% endcomment %}
+        margin: 50px auto;
+        min-height: 200px;
+        position: relative;
+        }
+        @media screen and (max-width: 768px) {
+        .carousel-container {
+            width: 80%;
+        }
+        }
+        @media screen and (max-width: 1024px) {
+        .carousel-container {
+            width: 85%;
+        }
+        }
+        .carousel-container .carousel-inner {
+        overflow: hidden;
+        }
+        .carousel-container .track {
+        display: inline-flex;
+        transition: transform 0.5s;
+        }
+        .carousel-container .card-container {
+        {% comment %} width: 259px; {% endcomment %}
+        width: 500px;
+        flex-shrink: 0;
+        height: 250px;
+        padding-right: 15px;
+        box-sizing: border-box;
+        }
+        .carousel-container .card-container .card {
+        width: 100%;
+        height: 100%;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        }
+        .nav button {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: 1px solid #aaa;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        }
+        .nav .prev {
+        left: -30px;
+        display: none;
+        }
+        .nav .prev.show {
+        display: block;
+        }
+        .nav .next {
+        right: -30px;
+        }
+        .nav .next.hide {
+        display: none;
+        }
+
+        .card > * {
+        flex: 1;
+        }
+        .card .img {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 30px;
+        }
+        .card .info {
+        flex-basis: 40px;
+        background: #333;
+        color: #fff;
+        flex-grow: 0;
+        padding: 10px;
+        box-sizing: border-box;
+        }
+
+
+    </style>
+</head>
+<body>
+
+{% load static %}
+    <div class="carousel-container">
+        <div class="carousel-inner">
+          <div class="track">
+
+           
+            {% comment %} <div class="container py-4">
+                <div class="p-5 mb-4 bg-light rounded-3">
+                    <div class="py-2" style="width: 500px; height: 280px;">
+                        <h1 class="fw-bold">Custom jumbotron</h1>
+                        <p class="col-md-8 fs-4">Using a series of utilities, you can create this jumbotron, just like the one in previous versions of Bootstrap. Check out the examples below for how you can remix and restyle it to your liking.</p>
+                        <button class="btn btn-primary btn-lg" type="button">Example button</button>
+                    </div>
+                </div>
+            </div> {% endcomment %}
+
+            {% for review in reviews %}
+            <div style="width: 500px; height: 350px;">
+            {% comment %} <div style="width: 500px; height: 350px; padding: 10px;"> {% endcomment %}
+            {% comment %} <div class="col-md-6"> {% endcomment %}
+                <div class="h-100 p-5 bg-light border rounded-3" style="margin:10px">
+                    <section class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            {% comment %} 프로필사진 {% endcomment %}
+                            {% if review.user.profile_photo %}
+                                <img width=50px height=50px style='border-radius:50%' src="{{review.user.profile_photo.url}}" alt="{{review.user.profile_photo.url}}">
+                            {% else %}
+                                {% comment %} 디폴트프로필이미지 {% endcomment %}
+                                <img width=50px height=50px style='border-radius:50%' src="{% static 'accounts/images/default.jpeg' %}" alt="">
+                            {% endif %}
+                            {% comment %} 유저명 {% endcomment %}
+                            <a class="px-2" style="font-size:1.5rem; text-decoration:none; color:black;" href="{% url 'accounts:profile' review.user.username %}">{{ review.user }}</a>
+                        </div>
+                        <div>
+                        {% comment %} score {% endcomment %}
+                        <span class="badge rounded-pill bg-secondary text-light"><i class="fas fa-star"></i> {{ review.score }} / 10 </span> 
+                        
+                    </section>
+                    <hr>
+                    {% comment %} 리뷰content {% endcomment %}
+                    <p>{{ review.content }}</p>
+                    {% comment %} <p>Or, keep it light and add a border for some added definition to the boundaries of your content. Be sure to look under the hood at the source HTML here as we've adjusted the alignment and sizing of both column's content for equal-height.</p> {% endcomment %}
+                    {% comment %} updated at {% endcomment %}
+                    <p class="text-muted">updated at {{ review.updated_at }}</p>
+                    <hr class="mb-2">
+                    <div class="d-flex flex-column justify-content-between"> <!--이모지들 & 버튼 간 정렬 시작 div-->
+                    
+                        {% comment %} 반응 div {% endcomment %}
+                        <div class="d-flex justify-content-start align-items-center"> <!--이모지들 정렬 시작 div-->
+                                <form id="happy-form" data-id="{{ review.pk }}">
+                                {% csrf_token %}
+                                {% if request.user in review.happy_users.all %}
+                                    <button class="btn btn-link">
+                                        <i id="happy-{{ review.pk }}" class="far fa-smile fa-lg" style="color:thistle"></i>
+                                    </button> 
+                                {% else %}
+                                    <button class="btn btn-link">
+                                        <i id="happy-{{ review.pk }}" class="far fa-smile fa-lg" style="color:black"></i>
+                                    </button>
+                                {% endif %}
+                                </form>
+                                <span id="happy-count-{{ review.pk }}">
+                                {{ review.happy_users.all|length }}
+                                </span>
+
+                                <form id="sad-form" data-id="{{ review.pk }}">
+                                {% csrf_token %}
+                                {% if request.user in review.sad_users.all %}
+                                    <button class="btn btn-link">
+                                        <i id="sad-{{ review.pk }}" class="far fa-sad-tear fa-lg" style="color:paleturquoise"></i>
+                                    </button> 
+                                {% else %}
+                                    <button class="btn btn-link">
+                                        <i id="sad-{{ review.pk }}" class="far fa-sad-tear fa-lg" style="color:black"></i>
+                                    </button>
+                                {% endif %}
+                                </form>
+                                <span id="sad-count-{{ review.pk }}">
+                                {{ review.sad_users.all|length }}
+                                </span>
+
+
+                                <form id="angry-form" data-id="{{ review.pk }}">
+                                {% csrf_token %}
+                                {% if request.user in review.angry_users.all %}
+                                    <button class="btn btn-link">
+                                        <i id="angry-{{ review.pk }}" class="far fa-angry fa-lg" style="color:sandybrown"></i>
+                                    </button> 
+                                {% else %}
+                                    <button class="btn btn-link">
+                                        <i id="angry-{{ review.pk }}" class="far fa-angry fa-lg" style="color:black"></i>
+                                    </button>
+                                {% endif %}
+                                </form>
+                                <span id="angry-count-{{ review.pk }}">
+                                {{ review.angry_users.all|length }}
+                                </span>
+                        </div>  <!--이모지들 정렬 끝 div-->                                
+                        {% comment %} <hr> {% endcomment %}
+                        {% comment %} 삭제 수정 {% endcomment %}
+                        <div class="mt-2">
+                            {% if user == review.user %}
+                                {% comment %} 수정 {% endcomment %}
+                                <button class="btn btn-outline-secondary" type="button"><a style="text-decoration:none ; color:black;" href="{% url 'movies:update_review' review.movie.pk review.pk%}">Edit</a></button>
+                                {% comment %} 삭제  / 에러난 이유: get으로 보내서.. @require_POST 데코 씌워놓아서 delete는 POST로 {% endcomment %}
+                                <form action="{% url 'movies:delete_review' review.movie.pk review.pk%}" method="POST" class="d-inline">
+                                    {% csrf_token %}
+                                    <button class="btn btn-outline-secondary" type="submit">Delete</button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div> <!--이모지들 & 버튼 간 정렬 끝 div-->
+
+                </div>
+            </div>
+            {% endfor %}
+
+
+          </div>
+        </div>
+
+        <div class="nav">
+          <button class="prev">
+            <i class="material-icons">
+            keyboard_arrow_left
+            </i>
+          </button>
+          <button class="next">
+            <i class="material-icons">
+            keyboard_arrow_right
+            </i>
+          </button>
+        </div>
+      </div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+const prev  = document.querySelector('.prev');
+const next = document.querySelector('.next');
+
+const track = document.querySelector('.track');
+
+let carouselWidth = document.querySelector('.carousel-container').offsetWidth;
+
+window.addEventListener('resize', () => {
+  carouselWidth = document.querySelector('.carousel-container').offsetWidth;
+})
+
+let index = 0;
+
+next.addEventListener('click', () => {
+  index++;
+  prev.classList.add('show');
+  track.style.transform = `translateX(-${index * carouselWidth}px)`;
+  
+  if (track.offsetWidth - (index * carouselWidth) < carouselWidth) {
+    next.classList.add('hide');
+  }
+})
+
+prev.addEventListener('click', () => {
+  index--;
+  next.classList.remove('hide');
+  if (index === 0) {
+    prev.classList.remove('show');
+  }
+  track.style.transform = `translateX(-${index * carouselWidth}px)`;
+})
+
+{% comment %} 리뷰반응 {% endcomment %}
+
+
+</script>
+
+</body>
+
+
+
+</html>

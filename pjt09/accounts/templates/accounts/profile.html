@@ -1,0 +1,342 @@
+{% extends 'base.html' %}
+{% comment %} static 경로 불러오기 {% endcomment %}
+{% comment %} 추가 {% endcomment %}
+{% comment %} {% load staticfiles %} {% endcomment %}
+{% load static %}
+{% comment %} jquery용 {% endcomment %}
+
+{% block css %}
+    <style>
+      @import url('https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap');
+      *{
+        font-family: 'Poppins', sans-serif;
+      }
+
+    {% comment %} bootstrap example, jumbotron 기본 스타일 {% endcomment %}
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+
+      body {
+        background: #c4c1e0;
+        {% comment %} background: #483D8B; {% endcomment %}
+      }
+
+      #pinkBtn {
+          background: #BA68C8;
+          box-shadow: none;
+          border: none
+      }
+
+      #pinkBtn:hover {
+          background: #682773
+      }
+
+      #pinkBtn:focus {
+          background: #682773;
+          box-shadow: none
+      }
+
+      #pinkBtn:active {
+          background: #682773;
+          box-shadow: none
+      }
+    </style>
+
+{% endblock css %}
+
+
+{% block content %}
+
+<main>
+  <div class="container py-4">
+    <header class="pb-3 mb-4 border-bottom">
+      {% comment %} <a href="/" class="d-flex align-items-center text-dark text-decoration-none"> {% endcomment %}
+        {% comment %} <svg xmlns="http://www.w3.org/2000/svg" width="40" height="32" class="me-2" viewBox="0 0 118 94" role="img"><title>Bootstrap</title><path fill-rule="evenodd" clip-rule="evenodd" d="M24.509 0c-6.733 0-11.715 5.893-11.492 12.284.214 6.14-.064 14.092-2.066 20.577C8.943 39.365 5.547 43.485 0 44.014v5.972c5.547.529 8.943 4.649 10.951 11.153 2.002 6.485 2.28 14.437 2.066 20.577C12.794 88.106 17.776 94 24.51 94H93.5c6.733 0 11.714-5.893 11.491-12.284-.214-6.14.064-14.092 2.066-20.577 2.009-6.504 5.396-10.624 10.943-11.153v-5.972c-5.547-.529-8.934-4.649-10.943-11.153-2.002-6.484-2.28-14.437-2.066-20.577C105.214 5.894 100.233 0 93.5 0H24.508zM80 57.863C80 66.663 73.436 72 62.543 72H44a2 2 0 01-2-2V24a2 2 0 012-2h18.437c9.083 0 15.044 4.92 15.044 12.474 0 5.302-4.01 10.049-9.119 10.88v.277C75.317 46.394 80 51.21 80 57.863zM60.521 28.34H49.948v14.934h8.905c6.884 0 10.68-2.772 10.68-7.727 0-4.643-3.264-7.207-9.012-7.207zM49.948 49.2v16.458H60.91c7.167 0 10.964-2.876 10.964-8.281 0-5.406-3.903-8.178-11.425-8.178H49.948z" fill="currentColor"></path></svg> {% endcomment %}
+        <div class="d-flex justify-content-between">
+          <div></div>
+          {% comment %} <a href="{% url 'movies:detail' movie.pk %}">dd</a> {% endcomment %}
+          {% comment %} <button class="btn btn-link"><i class="fas fa-chevron-left" style="color:dark;"></i></button> {% endcomment %}
+          {% comment %} <button class="btn btn-link d-flex d-inline justify-content-start"><i class="fas fa-chevron-left"></i></button> {% endcomment %}
+          <span class="fs-4"><b>{{person.username}}</b></span>
+          {% comment %} <span class="fs-4 d-flex d-inline justify-content-center"><b>{{person.username}}<b></span> {% endcomment %}
+          {% comment %} 팔로우버튼 {% endcomment %}
+          {% with followings=person.followings.all followers=person.followers.all %}
+              {% if request.user != person %}
+                <div>
+                  <form class="follow-form" data-id="{{ person.pk }}">
+                    {% csrf_token %}
+                    {% if request.user in followers %}
+                      {% comment %} <button id="followBtn">Unfollow</button> {% endcomment %}
+                      <button id="followBtn" class="btn btn-m content-font fw-bold" style="background-color:lightgray; width: 100px;">Unfollow</button>
+                      
+                    {% else %}
+                      {% comment %} <button id="followBtn">Follow</button> {% endcomment %}
+                      <button id="followBtn" class="btn btn-m content-font fw-bold" style="background-color:lightblue; width: 100px;">Follow</button>
+                    {% endif %}
+                  </form>
+                </div>
+              {% else %}
+                <div></div>
+
+              {% endif %}
+              
+          {% endwith %}
+          {% comment %} <div></div> {% endcomment %}
+        </div>
+      {% comment %} </a> {% endcomment %}
+    </header>
+{% comment %} pt-2 pb-2 pl-5 pr-5 {% endcomment %}
+    <div class="p-5 pt-2 pb-3 mb-4 bg-light rounded-3">
+      <div class="container-fluid pt-5 pb-">
+        <h1 class="display-5 fw-bold mb-5">Taste Analysis</h1>
+        {% comment %} <p class="col-md-8 fs-4">Using a series of utilities, you can create this jumbotron, just like the one in previous versions of Bootstrap. Check out the examples below for how you can remix and restyle it to your liking.</p> {% endcomment %}
+        
+        {% comment %} <p class="col-md-8 fs-4">Using a series of utilities, you can create this jumbotron, just like the one in previous versions of Bootstrap. Check out the examples below for how you can remix and restyle it to your liking.</p> {% endcomment %}
+        {% comment %} <button class="btn btn-primary btn-lg" type="button">Example button</button> {% endcomment %}
+        {% comment %} <button class="btn btn-outline-secondary" type="button">Edit Profile</button> {% endcomment %}
+        {% if person.profile_photo %}
+          <div class="mx-5" style="width: 100px; height:100px;"></div>
+          <img width=80 height=80 style='border-radius:50%' src="{{person.profile_photo.url}}" alt="{{person.profile_photo.url}}">
+          {% comment %} <img src="{{person.profile_photo_thumbnail.url}}" alt="{{person.profile_photo_thumbnail.url}}"> {% endcomment %}
+          {% if person.nickname %}
+            <span class="mx-3" style="font-size: 1.25rem;">{{person.nickname}}</span>
+          {% else %}
+            <span class="mx-3" style="font-size: 1.25rem;">{{person.username}}</span>
+          {% endif %}
+        {% else %}
+          {% comment %} 디폴트프로필이미지 {% endcomment %}
+          <div class="mx-5" style="width: 100px; height:100px;"></div>
+          <img width=80 height=80 style='border-radius:50%' src="{% static 'accounts/images/default.jpeg' %}" alt="">
+          {% if person.nickname %}
+            <span class="mx-3" style="font-size: 1.25rem;">{{person.nickname}}</span>
+          {% else %}
+            <span class="mx-3" style="font-size: 1.25rem;">{{person.username}}</span>
+          {% endif %}
+
+        {% endif %}
+
+      </div>
+    </div>
+
+    <div class="row align-items-md-stretch">
+      <div class="col-md-6">
+        <div class="h-100 p-5 text-white bg-dark rounded-3">
+          <h2 class="fw-bold">Activity</h2>
+          <hr>
+          <div class="d-flex flex-column justify-content-around"> <!--section 2개 정렬용 div 시작-->
+            <section class='row mt-4'>
+                <div class='col-4'>
+                  {% comment %} <img src="images/web.png" alt="Web Image"> {% endcomment %}
+                  <div class="d-flex flex-column justify-content-center align-items-center">
+                    <h1 class="fw-bold">{{person.review_set.all|length}}</h1>
+                    <p>No. of Ratings</p>
+                  </div>
+                </div>
+                <div class='col-4'>
+                  <div class="d-flex flex-column justify-content-center align-items-center">
+                    <h1 class="fw-bold">{{reactions_count}}</h1>
+                    {% comment %} <img src="images/html5.png" alt="HTML5 Image"> {% endcomment %}
+                    <p>Reactions</p>
+                    {% comment %} {{person.happy_reviews.all|length}} {% endcomment %}
+                    {% comment %} {{person.sad_reviews.all|length}} {% endcomment %}
+                    {% comment %} {{person.angry_reviews.all|length}} {% endcomment %}
+                  </div>
+                </div>
+                <div class='col-4'>
+                  <div class="d-flex flex-column justify-content-center align-items-center">
+                    <h1 class="fw-bold">{{score_avg}}</h1>
+                    {% comment %} <img src="images/css3.png" alt="CSS3 Image"> {% endcomment %}
+                    <p>Average Rating</p>
+                  </div>
+                </div>
+            </section>
+            <section class='row mt-4'>
+                <div class='col-4'>
+                  <div class="d-flex flex-column justify-content-center align-items-center">
+                    <h1 class="fw-bold">{{person.like_movies.all|length}}</h1>
+                    <p>Movies Likes</p>
+                  </div>
+                </div>
+                <div class='col-4'>
+                  <div class="d-flex flex-column justify-content-center align-items-center">
+                    <h1 class="fw-bold">{{person.wish_movies.all|length}}</h1>
+                    <p>Movies Saved</p>
+                  </div>
+                </div>
+                <div class='col-4'>
+                  <div class="d-flex flex-column justify-content-center align-items-center">
+                    <h1 class="fw-bold">{{figures_count}}</h1>
+                    <p>Fav. Movie Figures</p>
+                  </div>
+                </div>
+            </section>
+          </div> <!--section 2개 정렬용 div 끝-->
+          {% comment %} <p>Swap the background-color utility and add a `.text-*` color utility to mix up the jumbotron look. Then, mix and match with additional component themes and more.</p> {% endcomment %}
+          {% comment %} <button class="btn btn-outline-light" type="button">Example button</button> {% endcomment %}
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="h-100 p-5 bg-light border rounded-3">
+          <h2 class="fw-bold">User Information</h2>
+          <hr>
+          {% with followings=person.followings.all followers=person.followers.all %}
+          <section class='row mt-4'>
+              <div class='col-6'>
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                  <h1 id="followers" class="fw-bold">{{followers|length}}</h1>  
+                  <p>Followers</p>
+                </div>
+              </div>
+              <div class='col-6'>
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                  <h1 id="followings" class="fw-bold">{{followings|length}}</h1>
+                  <p>Following</p>
+                </div>
+              </div>
+          </section>
+          {% endwith %}          
+          
+          {% if person.bio %}
+            <br><span><button class="btn btn-link mx-1" style="color:gray;"><i class="fas fa-file-alt fa-2x"></i></button></span><br>
+            <p>{{person.bio}}</p>
+            {% else %}
+            <span><button class="btn btn-link" style="color:gray;"><i class="fas fa-file-alt fa-2x"></i></button></span>
+            <p class="d-inline text-muted">{{user.username}} has no bio description yet</p>
+          {% endif %}
+
+          {% if request.user == person %}
+          <button class="d-block btn btn-outline-secondary" type="button"><a href="{% url 'accounts:profile_update' %}" style="text-decoration:none; color:gray;">Edit Profile</a></button>
+        {% endif %}
+        </div>
+      </div>
+    </div>
+    
+    {% comment %} wordcloud {% endcomment %}
+    <div class="card mb-3 mt-4">
+      <div class="card-body d-flex justify-content-between align-items-center">
+        <div class="mx-1">
+          <h5 class="card-title display-5 fw-bold">Favorite Movie Genres</h5>
+          <p class="card-text">좋아요한 영화를 기반으로 분석한 {{person.username}}님이 선호하는 영화장르입니다</p>
+        </div>
+        <div class="mx-1">
+          <button id="pinkBtn" type="button" class="btn btn-lg px-4">
+            <a href={% url 'movies:after_signup' %} class="d-flex justify-content-center" style="text-decoration:none; color:white;">Random Recommendation</a>
+          </button>
+        </div>
+      </div>
+      <hr class="mt-0">
+      {% if person.like_movies.all|length > 0 %}
+        <img class="card-img" src="{% get_static_prefix %}wc/wc_{{ person.username }}.png" alt="..." style="max-width:100%; height:auto;">
+      {% endif %}
+      {% comment %} <img src="..." class="card-img-bottom" alt="..."> {% endcomment %}
+    </div>
+    {% comment %} <footer class="pt-3 mt-4 text-muted border-top">
+      &copy; 2021
+    </footer> {% endcomment %}
+
+  
+  {% comment %} Wish Movies {% endcomment %}
+  <div class="card mb-3 mt-4">
+    <h5 class="card-header card-title display-5 fw-bold">Wish Movies</h5>
+    <div class="card-body">
+      <h5 class="card-title fw-bold">{{person.username}}님이 저장한 영화</h5>
+      <h4><span class="badge" style="background-color:darkkhaki">{{person.wish_movies.all|length}} Movies in Total</span></h4>
+      {% comment %} <p class="card-text">{{person.wish_movies.all|length}} Movies in Total</p> {% endcomment %}
+      {% comment %} {% include 'accounts/_caro_test.html' %} {% endcomment %}
+      <div class="w-100">
+        {% include 'accounts/_carousel_multiple_final1.html' %}
+      </div>
+    </div>
+  </div>
+  {% comment %} Like Movies {% endcomment %}
+  <div class="card mb-3 mt-4">
+    <h5 class="card-header card-title display-5 fw-bold">Like Movies</h5>
+    <div class="card-body">
+      <h5 class="card-title fw-bold">{{person.username}}님이 좋아요한 영화</h5>
+      <h4><span class="badge" style="background-color:darkkhaki">{{person.like_movies.all|length}} Movies in Total</span></h4>
+      {% comment %} <p class="card-text">{{person.like_movies.all|length}} Movies in Total</p> {% endcomment %}
+      <div class="w-100">
+        {% comment %} {% include 'accounts/_one_caro.html' %} {% endcomment %}
+        {% include 'accounts/_carousel_multiple_final3_like_movies.html' %}
+      </div>
+    </div>
+  </div>
+
+  {% comment %} 좋아하는 배우 {% endcomment %}
+  <div class="card mb-3 mt-4">
+    <h5 class="card-header card-title display-5 fw-bold">Favorite Movie Figures</h5>
+    <div class="card-body">
+      <h5 class="card-title fw-bold">{{person.username}}님이 좋아요한 영화인</h5>
+      <h4><span class="badge" style="background-color:darkkhaki">{{figures_count}} Figures in Total</span></h4>
+      {% comment %} <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> {% endcomment %}
+      {% comment %} include {% endcomment %}
+      <div class="w-100">
+        {% include 'accounts/_one_caro2.html' %}
+        {% include 'accounts/_one_caro4_directors.html' %}
+      </div>
+    </div>
+  </div>
+
+  </div>
+</main>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    const form = document.querySelector('.follow-form')
+    form.addEventListener('submit', (event) => {
+      event.preventDefault()
+      const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+      const personId = event.target.dataset.id
+
+      axios.post(`http://127.0.0.1:8000/accounts/${personId}/follow/`, {}, {
+        headers: {'X-CSRFToken': csrftoken}
+      })
+        .then((response) => {
+          const followersCount = response.data.followersCount
+          const followingsCount = response.data.followingsCount
+          const followed = response.data.followed
+          const followButton = document.querySelector(`#followBtn`)
+
+          // 팔로우 버튼 동작
+          if (followed) {
+          followButton.innerText = 'Unfollow'
+          //followButton.setAttribute('class', 'btn-secondary')
+          followButton.setAttribute('class', 'btn btn-m content-font fw-bold')
+          followButton.style.backgroundColor = "lightgray";
+          } else {
+            followButton.innerText = 'Follow'
+            followButton.setAttribute('class', 'btn btn-m content-font fw-bold')
+            followButton.style.backgroundColor = "lightblue";
+          }
+
+          // 팔로워, 팔로잉 수 업데이트
+          const followers = document.querySelector('#followers')
+          followers.innerText = followersCount
+          const followings = document.querySelector('#followings')
+          followings.innerText = followingsCount
+        })
+        .catch((error) => {
+        if (error.response.status === 401) {
+            window.location.href = '/accounts/login/'
+        }
+      })
+    })
+
+
+
+  </script>
+
+{% endblock %}
+

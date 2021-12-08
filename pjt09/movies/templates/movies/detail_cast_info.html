@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+        .carousel-container3 {
+        margin: 10px auto;
+        min-height: 200px;
+        position: relative;
+        }
+        @media screen and (max-width: 768px) {
+        .carousel-container3 {
+            width: 80%;
+        }
+        }
+        @media screen and (max-width: 1024px) {
+        .carousel-container3 {
+            width: 85%;
+        }
+        }
+        .carousel-container3 .carousel-inner {
+        overflow: hidden;
+        }
+        .carousel-container3 .track3 {
+        display: inline-flex;
+        transition: transform 0.5s;
+        }
+        .carousel-container3 .card-container3 {
+        width: 259px;
+        flex-shrink: 0;
+        height: auto;
+        padding-right: 15px;
+        box-sizing: border-box;
+        }
+        .carousel-container3 .card-container3 .card {
+        width: 100%;
+        height: 100%;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        }
+        .nav button {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: 1px solid #aaa;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        }
+        .nav .prev3 {
+        left: -30px;
+        display: none;
+        }
+        .nav .prev3.show {
+        display: block;
+        }
+        .nav .next3 {
+        right: -30px;
+        }
+        .nav .next3.hide {
+        display: none;
+        }
+
+        .card > * {
+        flex: 1;
+        }
+        .card .img {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 30px;
+        }
+        .card .info {
+        flex-basis: 40px;
+        background: #333;
+        flex-grow: 0;
+        padding: 10px;
+        box-sizing: border-box;
+        border-bottom-right-radius: 0.5em 0.5em;
+        border-bottom-left-radius:  0.5em 0.5em;
+        }
+    </style>
+</head>
+<body>
+    <div class="carousel-container3">
+        <div class="carousel-inner">
+          <div class="track3">
+          {% for d in director %}
+            <div class="card-container3">
+              <div class="card">
+                {% if d.profile_path == None %}
+                  <img height="350px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Noimage.svg/1479px-Noimage.svg.png" alt="No image">
+                {% else %}
+                  <img height="350px" src="https://image.tmdb.org/t/p/w500/{{ d.profile_path }}" class="card-img-top" alt="director image">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title"><b>{{ d.director_name }}</b></h5>
+                  {% comment %} <p class= "card-text" style="display:-webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow:hidden; text-overflow: ellipsis; word-wrap:break-word; line-height: 1.2em; height: 3.6em;">{{ movie.overview }}</p> {% endcomment %}
+                </div>
+                <div class="d-flex justify-content-between align-items-center info" style="background:#f8f9fa;">
+                  <small class="float-start text-muted">Director</small>
+
+                  <form class="float-end" id="director-like-form" data-id="{{ d.pk }}">
+                      {% csrf_token %}
+                      {% if request.user in d.like_users.all %}
+                          <button class="btn-link" style="border: none; background:none;">
+                              <i id="director-like-{{ d.pk }}" class="fas fa-heart fa-lg" style="color:black"></i>
+                          </button> 
+                      {% else %}
+                          <button class="btn-link" style="border: none; background:none;">
+                              <i id="director-like-{{ d.pk }}" class="far fa-heart fa-lg" style="color:black"></i>
+                          </button> 
+                      {% endif %}
+                  </form> 
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+          {% for actor in actors %}
+            <div class="card-container3">
+              <div class="card">
+              {% if actor.profile_path == None %}
+                <img height="350px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Noimage.svg/1479px-Noimage.svg.png" alt="No image">
+              {% else %}
+                <img height="350px" src="https://image.tmdb.org/t/p/w500/{{ actor.profile_path }}" class="card-img-top" alt="actor image">
+              {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title"><b>{{ actor.actor_name }}</b></h5>
+                  {% comment %} <p class= "card-text" style="display:-webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow:hidden; text-overflow: ellipsis; word-wrap:break-word; line-height: 1.2em; height: 3.6em;">{{ movie.overview }}</p> {% endcomment %}
+                </div>
+                <div class="d-flex justify-content-between align-items-center info" style="background:#f8f9fa;">
+                  <small class="float-start text-muted">Actor</small>
+
+                  <form class="float-end" id="actor-like-form" data-id="{{ actor.pk }}">
+                      {% csrf_token %}
+                      {% if request.user in actor.like_users.all %}
+                          <button class="btn-link" style="border: none; background:none;">
+                              <i id="actor-like-{{ actor.pk }}" class="fas fa-heart fa-lg" style="color:black"></i>
+                          </button> 
+                      {% else %}
+                          <button class="btn-link" style="border: none; background:none;">
+                              <i id="actor-like-{{ actor.pk }}" class="far fa-heart fa-lg" style="color:black"></i>
+                          </button> 
+                      {% endif %}
+                  </form> 
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+          </div>
+        </div>
+        <div class="nav">
+          <button class="prev3">
+            <i class="material-icons">
+            keyboard_arrow_left
+            </i>
+          </button>
+          <button class="next3">
+            <i class="material-icons">
+            keyboard_arrow_right
+            </i>
+          </button>
+        </div>
+      </div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+const prev3  = document.querySelector('.prev3');
+const next3 = document.querySelector('.next3');
+
+const track3 = document.querySelector('.track3');
+
+let carouselWidth3 = document.querySelector('.carousel-container3').offsetWidth;
+
+window.addEventListener('resize', () => {
+  carouselWidth3 = document.querySelector('.carousel-container3').offsetWidth;
+})
+
+let index3 = 0;
+
+next3.addEventListener('click', () => {
+  index3++;
+  prev3.classList.add('show');
+  track3.style.transform = `translateX(-${index3 * carouselWidth3}px)`;
+  
+  if (track3.offsetWidth - (index3 * carouselWidth3) < carouselWidth3) {
+    next3.classList.add('hide');
+  }
+})
+
+prev3.addEventListener('click', () => {
+  index3--;
+  next3.classList.remove('hide');
+  if (index3 === 0) {
+    prev3.classList.remove('show');
+  }
+  track3.style.transform = `translateX(-${index3 * carouselWidth3}px)`;
+})
+
+const dlforms = document.querySelectorAll('#director-like-form')
+    dlforms.forEach (form => {
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+        form.addEventListener('submit', function (event) {
+        event.preventDefault()
+        const directorId = event.target.dataset.id
+        axios.post(`http://127.0.0.1:8000/movies/${directorId}/director_like/`, {}, {
+            headers:{'X-CSRFToken': csrftoken},
+        })
+        .then(function(response){
+            const likedd = response.data.liked
+            
+            // 좋아요 버튼 찾아오고, 색 변경하기 
+            const likeColor = document.querySelector(`#director-like-${directorId}`)
+            if (likedd) {
+            likeColor.className = 'fas fa-heart fa-lg'
+            } else {
+            likeColor.className = 'far fa-heart fa-lg'
+            }
+        })
+        
+        // 로그인 안한 사용자 거르기 
+        .catch((err) => {
+            if (err.response.status === 401) {
+            window.location.href = '/accounts/login/'
+            }
+        })
+        })
+    })
+
+
+const alforms = document.querySelectorAll('#actor-like-form')
+    alforms.forEach (form => {
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+        form.addEventListener('submit', function (event) {
+        event.preventDefault()
+        const actorId = event.target.dataset.id
+        axios.post(`http://127.0.0.1:8000/movies/${actorId}/actor_like/`, {}, {
+            headers:{'X-CSRFToken': csrftoken},
+        })
+        .then(function(response){
+            const likedd = response.data.liked
+            
+            // 좋아요 버튼 찾아오고, 색 변경하기 
+            const likeColor = document.querySelector(`#actor-like-${actorId}`)
+            if (likedd) {
+            likeColor.className = 'fas fa-heart fa-lg'
+            } else {
+            likeColor.className = 'far fa-heart fa-lg'
+            }
+        })
+        
+        // 로그인 안한 사용자 거르기 
+        .catch((err) => {
+            if (err.response.status === 401) {
+            window.location.href = '/accounts/login/'
+            }
+        })
+        })
+    })
+
+</script>
+
+</body>
+
+
+
+</html>

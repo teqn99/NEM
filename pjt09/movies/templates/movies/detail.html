@@ -1,0 +1,435 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+{% comment %} bootstrap example, jumbotron 기본 스타일 {% endcomment %}
+  <style>
+  body {
+    background: rgb(248, 249, 250);
+  }
+        {% comment %} 태균님 {% endcomment %}
+        .star-rating {width:304px; }
+        .star-rating,.star-rating span {display:inline-block; height:55px; overflow:hidden; background:url('{% static 'base/images/star.png' %}')no-repeat; }
+        .star-rating span{background-position:left bottom; line-height:0; vertical-align:top; }
+
+        {% comment %} 채현님 {% endcomment %}
+        .bd-placeholder-img {
+          font-size: 1.125rem;
+          text-anchor: middle;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          user-select: none;
+        }
+
+        @media (min-width: 768px) {
+          .bd-placeholder-img-lg {
+            font-size: 3.5rem;
+          }
+        }
+        {% comment %} features {% endcomment %}
+        .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+      /* 추가스타일링 */
+      .b-example-divider {
+        height: 3rem;
+        background-color: rgba(0, 0, 0, .1);
+        border: solid rgba(0, 0, 0, .15);
+        border-width: 1px 0;
+        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+      }
+
+      .bi {
+        vertical-align: -.125em;
+        fill: currentColor;
+      }
+
+      .feature-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 4rem;
+        height: 4rem;
+        margin-bottom: 1rem;
+        font-size: 2rem;
+        color: #fff;
+        border-radius: .75rem;
+      }
+
+      .icon-link {
+        display: inline-flex;
+        align-items: center;
+      }
+      .icon-link > .bi {
+        margin-top: .125rem;
+        margin-left: .125rem;
+        transition: transform .25s ease-in-out;
+        fill: currentColor;
+      }
+      .icon-link:hover > .bi {
+        transform: translate(.25rem);
+      }
+
+      .icon-square {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 3rem;
+        height: 3rem;
+        font-size: 1.5rem;
+        border-radius: .75rem;
+      }
+
+      .rounded-4 { border-radius: .5rem; }
+      .rounded-5 { border-radius: 1rem; }
+
+      .text-shadow-1 { text-shadow: 0 .125rem .25rem rgba(0, 0, 0, .25); }
+      .text-shadow-2 { text-shadow: 0 .25rem .5rem rgba(0, 0, 0, .25); }
+      .text-shadow-3 { text-shadow: 0 .5rem 1.5rem rgba(0, 0, 0, .25); }
+
+      .card-cover {
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: cover;
+      }
+  </style>
+{% endblock css %}
+
+{% block youtube %}
+  <iframe width="100%" height="619px" src="https://www.youtube.com/embed/{{ movie.trailer }}/" frameborder="0"
+		  allowfullscreen class="mb-0"></iframe>
+{% endblock youtube %}
+
+{% block content %}
+  {% comment %} <iframe width="100%" height="619" src="https://www.youtube.com/embed/{{ movie.trailer }}?autoplay=1&mute=1" frameborder="0"
+	  allowfullscreen class="mb-0"></iframe> {% endcomment %}
+  <div class="container py-4">
+    <div class="p-5 pt-2 pb-3 mb-4 rounded-3 d-flex justify-content-front border" style="background:rgb(241,240,241);">
+      {% comment %} <div class="container-fluid pt-5 pb-5"> {% endcomment %}
+      <div class="mt-3 mb-5">
+        <img class="mt-5" style="width:300px;" src="https://image.tmdb.org/t/p/w500/{{ movie.poster_path }}" alt="movie poster">
+      </div>
+      <div class="mt-3 mb-5 mx-5" style="overflow:hidden;">
+        <h1 class="mt-5"><b>{{ movie.title }}</b></h1>
+        <p><i>{{ movie.original_title }}</i></p>
+        <p>
+        {% for genre in movie.genres.all %}
+          {% if forloop.last %}
+            {{ genre.genre_name }}
+          {% else %}
+            {{ genre.genre_name }},
+          {% endif %}
+        {% endfor %}
+        </p>
+        <p>현재 <b>{{ rank }}위</b> 중인 작품</p>
+        
+        <div class="wrap-star mb-2">
+          <div class='star-rating'>
+            <span style ="width:{{ score }}%"></span>
+          </div>
+        </div>
+        <p>{{ movie.overview }}</p>
+        <form id="like-form" data-id="{{ movie.pk }}" style="display:inline;">
+          {% csrf_token %}
+          {% if request.user in movie.like_users.all %}
+            <button class="btn-link" style="border: none; background:none;">
+              <i id="like-{{ movie.pk }}" class="fas fa-thumbs-up fa-lg" style="color:black"></i>
+            </button> 
+          {% else %}
+            <button class="btn-link" style="border: none; background:none;">
+              <i id="like-{{ movie.pk }}" class="far fa-thumbs-up fa-lg" style="color:black"></i>
+            </button> 
+          {% endif %}
+        </form>
+        <form id="wish-form" data-id="{{ movie.pk }}" style="display:inline;">
+          {% csrf_token %}
+          {% if request.user in movie.wish_users.all %}
+            <button class="btn-link" style="border: none; background:none;">
+              <i id="wish-{{ movie.pk }}" class="fas fa-bookmark fa-lg" style="color:black"></i>
+            </button> 
+          {% else %}
+            <button class="btn-link" style="border: none; background:none;">
+              <i id="wish-{{ movie.pk }}" class="far fa-bookmark fa-lg" style="color:black"></i>
+            </button> 
+          {% endif %}
+        </form>
+      </div>
+      {% comment %} </div> {% endcomment %}
+    </div>
+  </div>
+
+  <h2 class="pb-2 border-bottom display-5 fw-bold">Director / Cast</h2>
+  {% include 'movies/detail_cast_info.html' %}
+
+<main>
+  <div class="container py-4">
+
+  {% comment %} 비슷한 영화  {% endcomment %}
+    <div class="card mb-3 mt-4 bg-dark">
+      <div class="d-flex justify-content-between align-items-center mt-2 mx-2">
+        <h5 class="d-inline card-header card-title display-5 fw-bold" style="color:white;">Reviews</h5>
+        <button class="btn btn-secondary" style="text-decoration:none;width:150px; height: 45px;">
+        {% if request.user.is_authenticated %}
+          <a href="{% url 'movies:review_create' movie.pk %}" style="text-decoration:none; color:white;">Leave a Review</a>
+        {% else %}
+          <a href="{% url 'movies:review_create' movie.pk %}" style="text-decoration:none; color:white;">Login First</a>
+        {% endif %}
+        </button>
+      </div>
+
+      <div class="card-body">
+        <h4 style="margin-left: 10px;"><span class="badge" style="background-color:darkkhaki">{{ movie.review_set.all|length }} Reviews in Total</span></h4>
+        {% comment %} <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> {% endcomment %}
+        {% comment %} include {% endcomment %}
+      <div class="w-100">
+        {% comment %} {% include 'movies/_multiple_caro5_movie_recommendation.html' %} {% endcomment %}
+        {% include 'movies/_multiple_caro_test.html' %}
+      </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+
+  {% comment %} 커스텀카드 - 추천영화용 {% endcomment %}
+  <div class="container px-4 py-5" id="custom-cards">
+    <h2 class="pb-2 border-bottom display-5 fw-bold">More Like This</h2>
+
+    <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
+
+      {% for info in info_list %}
+      
+      <div class="col">
+        {% comment %} <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg" style="background-image: url('unsplash-photo-2.jpg');"> {% endcomment %}
+        <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg">
+          <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+            {% comment %} <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Much longer title that wraps to multiple lines</h2> {% endcomment %}
+            <h3 class="text-light fw-bold">{{ info.title }}</h3>
+            <h4 class="text-muted pb-2 fw-bold border-bottom">{{ info.original_title }}</h4>
+            {% comment %} <h4 class="text-muted pb-2 fw-bold border-bottom">{{ info.release_date|date:"m-d" }}</h4> {% endcomment %}
+            {% comment %} <h4 class="text-muted pb-2 fw-bold border-bottom">{{ info.release_date }}</h4> {% endcomment %}
+
+            <a href="{% url 'movies:detail' info.movie_id %}" class="w-100 d-flex justify-content-center">
+              {% comment %} <img style="width: 150px;" src="{{ info.poster_path }}" alt="movie poster"> {% endcomment %}
+              <img class="w-80" style="width: 180px; height: 250px" src="{{ info.poster_path }}" alt="movie poster">
+            </a>
+            
+            
+            <ul class="d-flex list-unstyled mt-auto">
+              <li class="me-auto">
+                {% comment %} <div class="bg-light" style="width: 32px; height:32px;"></div> {% endcomment %}
+                {% comment %} <img src="https://github.com/twbs.png" alt="Bootstrap" width="32" height="32" class="rounded-circle border border-white"> {% endcomment %}
+                {% comment %} <img src="{{ info.poster_path }}" alt="movie poster" width="32" height="32" class="rounded-circle border border-white"> {% endcomment %}
+                <span class="badge rounded-pill bg-light text-dark"><i class="fas fa-star"></i> Vote Average {{ info.vote_average }}</span> 
+                <div class="badge"></div>
+              </li>
+
+              <li class="d-flex align-items-center me-3">
+                <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"/></svg>
+                {% comment %} <small>release date </small> {% endcomment %}
+              </li>
+              <li class="d-flex align-items-center">
+                <svg class="bi me-2" width="1em" height="1em"><use xlink:href="#calendar3"/></svg>
+                {% comment %} <small>{{info.release_date}}</small> {% endcomment %}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    
+      {% endfor %}
+    </div>
+  </div>
+
+    
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script>
+  const lforms = document.querySelectorAll('#like-form')
+    lforms.forEach (form => {
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+        form.addEventListener('submit', function (event) {
+        event.preventDefault()
+        const movieId = event.target.dataset.id
+        axios.post(`http://127.0.0.1:8000/movies/${movieId}/like/`, {}, {
+            headers:{'X-CSRFToken': csrftoken},
+        })
+        .then(function(response){
+            const likedd = response.data.liked
+            
+            // 좋아요 버튼 찾아오고, 색 변경하기 
+            const likeColor = document.querySelector(`#like-${movieId}`)
+            if (likedd) {
+            likeColor.className = 'fas fa-thumbs-up fa-lg'
+            } else {
+            likeColor.className = 'far fa-thumbs-up fa-lg'
+            }
+        })
+        
+        // 로그인 안한 사용자 거르기 
+        .catch((err) => {
+            if (err.response.status === 401) {
+            window.location.href = '/accounts/login/'
+            }
+        })
+        })
+    })
+
+    const form = document.querySelector('#wish-form')
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+    form.addEventListener('submit', function (event) {
+      event.preventDefault()
+      const movieId = event.target.dataset.id
+      axios.post(`http://127.0.0.1:8000/movies/${movieId}/wish/`, {}, {
+        headers:{'X-CSRFToken': csrftoken},
+      })
+      .then(function(response){
+        const wishedd = response.data.wished
+        
+        // 좋아요 버튼 찾아오고, 색 변경하기 
+        const wishColor = document.querySelector(`#wish-${movieId}`)
+        if (wishedd) {
+          wishColor.className = 'fas fa-bookmark fa-lg'
+        } else {
+          wishColor.className = 'far fa-bookmark fa-lg'
+        }
+      })
+      
+      // 로그인 안한 사용자 거르기 
+      .catch((err) => {
+        if (err.response.status === 401) {
+          window.location.href = '/accounts/login/'
+        }
+      })
+    })
+
+
+   //리뷰 좋아요
+    const happyForms = document.querySelectorAll('#happy-form')
+    happyForms.forEach(function (form) {
+      // console.log(form)
+      form.addEventListener('submit', function (event) {
+        event.preventDefault()
+        // console.log(event)
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+        console.log(csrftoken)
+        const reviewId = event.target.dataset.id
+        axios.post(`http://127.0.0.1:8000/movies/${reviewId}/happy_review/`, {}, { 
+          headers: {'X-CSRFToken': csrftoken }   
+        })
+        .then(function (response) {
+          console.log(response)
+          console.log(response.data)
+          const count = response.data.count
+          const is_happy = response.data.is_happy
+
+          const happyIconColor = document.querySelector(`#happy-${reviewId}`)
+          if (is_happy) {
+            happyIconColor.style.color = 'thistle'
+          } else {
+            happyIconColor.style.color = 'black'
+          }
+
+          const happyCount = document.querySelector(`#happy-count-${reviewId}`)
+          happyCount.innerText = count
+        })
+        .catch((err) => {
+          if (err.response.status === 401) {
+            window.location.href = '/accounts/login/'
+          }
+        })
+
+      })
+    })
+
+   //리뷰 좋아요
+    const sadForms = document.querySelectorAll('#sad-form')
+    sadForms.forEach(function (form) {
+      // console.log(form)
+      form.addEventListener('submit', function (event) {
+        event.preventDefault()
+        // console.log(event)
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+        console.log(csrftoken)
+        const reviewId = event.target.dataset.id
+        axios.post(`http://127.0.0.1:8000/movies/${reviewId}/sad_review/`, {}, { 
+          headers: {'X-CSRFToken': csrftoken }   
+        })
+        .then(function (response) {
+          console.log(response)
+          console.log(response.data)
+          const count = response.data.count
+          const is_sad = response.data.is_sad
+
+          const sadIconColor = document.querySelector(`#sad-${reviewId}`)
+          if (is_sad) {
+            sadIconColor.style.color = 'paleturquoise'
+          } else {
+            sadIconColor.style.color = 'black'
+          }
+
+          const sadCount = document.querySelector(`#sad-count-${reviewId}`)
+          sadCount.innerText = count
+        })
+        .catch((err) => {
+          if (err.response.status === 401) {
+            window.location.href = '/accounts/login/'
+          }
+        })
+
+      })
+    })
+
+       //리뷰 좋아요
+    const angryForms = document.querySelectorAll('#angry-form')
+    angryForms.forEach(function (form) {
+      // console.log(form)
+      form.addEventListener('submit', function (event) {
+        event.preventDefault()
+        // console.log(event)
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+        console.log(csrftoken)
+        const reviewId = event.target.dataset.id
+        axios.post(`http://127.0.0.1:8000/movies/${reviewId}/angry_review/`, {}, { 
+          headers: {'X-CSRFToken': csrftoken }   
+        })
+        .then(function (response) {
+          console.log(response)
+          console.log(response.data)
+          const count = response.data.count
+          const is_angry = response.data.is_angry
+
+
+          const angryIconColor = document.querySelector(`#angry-${reviewId}`)
+          if (is_angry) {
+            angryIconColor.style.color = 'sandybrown'
+          } else {
+            angryIconColor.style.color = 'black'
+          }
+
+          const angryCount = document.querySelector(`#angry-count-${reviewId}`)
+          angryCount.innerText = count
+        })
+        .catch((err) => {
+          if (err.response.status === 401) {
+            window.location.href = '/accounts/login/'
+          }
+        })
+
+      })
+    })
+
+  </script>
+{% endblock %}

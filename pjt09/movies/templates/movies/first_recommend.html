@@ -1,0 +1,426 @@
+{% extends 'base.html' %}
+
+{% block css %}
+    <style>
+        /* @import url('https://fonts.googleapis.com/css?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap'); */
+        /* @import url('https://fonts.googleapis.com/css?family=Poppins:200;300;400;500;600;700;800;900&display=swap'); */
+        @import url('https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap');
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing:border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            display: fluid;
+            /* display: flex; */
+            justify-content: center;
+            align-items: center;
+            background: #08001b;
+            min-height: 100vh;
+        }
+        .container{
+            {% comment %} width: 1100px; {% endcomment %}
+            width:100%;
+            {% comment %} margin: 400; {% endcomment %}
+            {% comment %} margin: 1000; {% endcomment %}
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .container .card{
+            position: relative;
+            {% comment %} width: 300px; {% endcomment %}
+            width: 350px;
+            height: 555px;
+            background: #0c001b;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px;       
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);   
+              /* 박스넘어가는것은 보이지 않도록 */
+              overflow: hidden;
+        }
+
+        /* 카드 hover o x에 따라서 opacity조절 */
+        .container:hover .card{
+            {% comment %} opacity: 0.2; {% endcomment %}
+            {% comment %} opacity: 0.5; {% endcomment %}
+            {% comment %} opacity: 0.6; {% endcomment %}
+        }
+
+        .container .card:hover{
+            opacity: 1;
+        }
+
+
+
+        .container .card::before{
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            bottom: 2px;
+            width: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            pointer-events: none;
+        }
+        .container .card .content{
+            padding: 30px 30px 0 30px;
+            text-align: center;
+        }
+        .container .card .content h2{
+            position:absolute;
+            right: 30px;
+            font-size: 4em;
+            font-weight: 800;
+            color: #1779ff;
+            z-index: 1;
+            opacity: 0.1;
+            transition: 0.5s;
+        }
+        .container .card:hover .content h2{
+            opacity: 1;
+            transform: translateY(-70px);
+        }
+        .container .card .content h3{
+            position: relative;
+            font-size: 1.5em;
+            color: #fff;
+            z-index: 2;
+            opacity: 0.5;
+            letter-spacing: 1px;
+            transition: 0.5s;
+        }
+
+        .container .card .content p{
+            position: relative;
+            font-size: 1em;
+            color: #fff;
+            z-index: 2;
+            opacity: 0.5;
+            font-weight: 300;
+            /* letter-spacing: 1px; */
+            transition: 0.5s;
+        }
+
+        .container .card:hover .content h3,
+        .container .card:hover .content p{
+            opacity: 1;
+        }
+        
+        .container .card .content a{
+            display: inline-block;
+            margin-top: 15px;
+            padding: 8px 15px;
+            background: #fff;
+            color: #0c002b;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight:600;
+        }
+        .container .card span{
+            transition: 0.5;
+            opacity: 0;
+        }
+        .container .card:hover span{
+            opacity: 1;
+        }
+
+        /* 1 */
+
+        .container .card span:nth-child(1){
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px; 
+            background: linear-gradient(to right, transparent, #1779ff);
+            animation: animate1 2s linear infinite;
+        }
+        @keyframes animate1{
+            0%
+            {
+                transform: translateX(-100%);
+            }
+            100%
+            {
+                transform: translateX(100%);
+            }
+            
+        }
+
+        /* 2 */
+        .container .card span:nth-child(2){
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 3px;
+            height: 100%; 
+            background: linear-gradient(to bottom, transparent, #1779ff);
+            animation: animate2 2s linear infinite;
+            animation-delay: 1s;
+        }
+        @keyframes animate2{
+            0%
+            {
+                transform: translateY(-100%);
+            }
+            100%
+            {
+                transform: translateY(100%);
+            }
+            
+        }
+
+        /* 3 */
+        .container .card span:nth-child(3){
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px; 
+            background: linear-gradient(to left, transparent, #1779ff);
+            animation: animate3 2s linear infinite;
+        }
+        @keyframes animate3{
+            0%
+            {
+                transform: translateX(100%);
+            }
+            100%
+            {
+                transform: translateX(-100%);
+            }
+            
+        }
+
+        /* 4 */
+        .container .card span:nth-child(4){
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%; 
+            background: linear-gradient(to top, transparent, #1779ff);
+            animation: animate4 2s linear infinite;
+            animation-delay: 1s;
+        }
+        @keyframes animate4{
+            0%
+            {
+                transform: translateY(100%);
+            }
+            100%
+            {
+                transform: translateY(-100%);
+            }
+            
+        }
+
+    </style>
+{% endblock css %}
+
+
+
+    
+    
+
+{% comment %} {% block content %} {% endcomment %}
+{% block whole_first_recommend %}
+
+
+<section>   <!--점보트론-->
+    <div class="px-4 py-5 my-5 text-center">
+        <!-- <img class="d-block mx-auto mb-4" src="../assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"> -->
+        <h1 class="display-3 fw-bold" style="color:white;">You May Also Like..</h1>
+        {% comment %} <div class="col-lg-6 mx-auto"> {% endcomment %}
+        <div class="mx-auto w-80">
+          {% comment %} <p class="lead mb-4 text-secondary">Quickly design and customize responsive mobile-first sites with Bootstrap, the world’s most popular front-end open source toolkit, featuring Sass variables and mixins, responsive grid system, extensive prebuilt components, and powerful JavaScript plugins.</p> {% endcomment %}
+          <p class="lead mt-4 mb-2 text-secondary">NEM에 오신 것을 환영합니다!</p>
+          <p class="lead mb-2 text-secondary">아래는 {{user.username}}님이 선택하신 영화를 기반으로 한 NEM의 추천 영화 목록입니다.</p>
+          <p class="lead mb-2 text-secondary">좋아요나 저장하기 버튼을 누르면 {{user.username}}님의 프로필 페이지에 저장됩니다.</p>
+          <p class="lead mb-4 text-secondary">지금 바로 NEM의 영화들을 둘러보고 싶으시다면 To Main Page 버튼을 눌러주세요!</p>
+          {% comment %} <p class="lead mb-4 text-secondary">{{}}</p> {% endcomment %}
+          <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            <button type="button" class="btn btn-outline-secondary btn-lg px-4"><a style="text-decoration:none;" class="text-secondary" href="{% url 'movies:main-view' %}">To Main Page</a></button>
+            <!-- <button type="button" class="btn btn-light btn-outline-secondary btn-lg px-4"><a style="text-decoration:none;" class="text-secondary" href="{% url 'movies:main-view' %}">To Main Page</a></button> -->
+            <button type="button" class="btn btn-primary btn-lg px-4 gap-3"><a style="text-decoration:none;" class="text-light" href="{% url 'accounts:profile' user.username %}">To Profile Page</a></button>
+        
+          </div>
+        </div>
+      </div>
+</section>
+
+<div class="container">
+
+    {% for r in recommend_list %}
+        {% if forloop.counter < 10 %}
+        <div class="card">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <div class="content">
+                <h2>0{{forloop.counter}}</h2>
+                {% comment %} <h2>01</h2> {% endcomment %}
+                <h3 class="fw-bold">{{ r.title }}</h3>
+                {% comment %} <h4>{{ r.original_title }}</h4> {% endcomment %}
+                <p>{{ r.original_title }}</p>
+                {% comment %} <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa, consequatur pariatur maiores aliquid porro quis eos quisquam? Voluptate esse voluptates iusto exercitationem quidem nisi cum nihil, quod repellat debitis molestiae?</p> {% endcomment %}
+                <img width=200 height=280 src="{{ r.poster_path }}" alt="...">
+                <!-- <a href="#">Read More</a> -->
+                  
+                <section class="d-flex justify-content-center mt-2">   <!--버튼 section-->
+                    <form id="like-form" data-id="{{ r.movie_id }}">
+                        {% csrf_token %}
+                        {% if request.user in r.like_users.all %}
+                            <button class="btn btn-link">
+                                <i id="like-{{ r.movie_id }}" class="fas fa-thumbs-up fa-lg" style="color:white"></i>
+                            </button> 
+                        {% else %}
+                            <button class="btn btn-link">
+                                <i id="like-{{ r.movie_id }}" class="far fa-thumbs-up fa-lg" style="color:white"></i>
+                            </button> 
+                        {% endif %}
+                    </form>
+
+                    <form id="wish-form" data-id="{{ r.movie_id }}">
+                        {% csrf_token %}
+                        {% if request.user in r.wish_users.all %}
+                            <button class="btn btn-link">
+                                <i id="wish-{{ r.movie_id }}" class="fas fa-bookmark fa-lg" style="color:white"></i>
+                            </button> 
+                        {% else %}
+                            <button class="btn btn-link">
+                                <i id="wish-{{ r.movie_id }}" class="far fa-bookmark fa-lg" style="color:white"></i>
+                            </button> 
+                        {% endif %}
+                    </form>
+                </section><!--버튼 section-->
+            </div>
+        </div>
+
+        {% else %}
+        <div class="card">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <div class="content">
+                <h2>{{forloop.counter}}</h2>
+                {% comment %} <h2>01</h2> {% endcomment %}
+                <h3 class="fw-bold">{{ r.title }}</h3>
+                {% comment %} <h4>{{ r.original_title }}</h4> {% endcomment %}
+                <p>{{ r.original_title }}</p>
+                {% comment %} <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa, consequatur pariatur maiores aliquid porro quis eos quisquam? Voluptate esse voluptates iusto exercitationem quidem nisi cum nihil, quod repellat debitis molestiae?</p> {% endcomment %}
+                <img width=200 height=280 src="{{ r.poster_path }}" alt="...">
+                {% comment %} <a href="#">Read More</a> {% endcomment %}
+                                <section class="d-flex justify-content-center mt-2">   <!--버튼 section-->
+                    <form id="like-form" data-id="{{ r.movie_id }}">
+                        {% csrf_token %}
+                        {% if request.user in r.like_users.all %}
+                            <button class="btn btn-link">
+                                <i id="like-{{ r.movie_id }}" class="fas fa-thumbs-up fa-lg" style="color:white"></i>
+                            </button> 
+                        {% else %}
+                            <button class="btn btn-link">
+                                <i id="like-{{ r.movie_id }}" class="far fa-thumbs-up fa-lg" style="color:white"></i>
+                            </button> 
+                        {% endif %}
+                    </form>
+
+                    <form id="wish-form" data-id="{{ r.movie_id }}">
+                        {% csrf_token %}
+                        {% if request.user in r.wish_users.all %}
+                            <button class="btn btn-link">
+                                <i id="wish-{{ r.movie_id }}" class="fas fa-bookmark fa-lg" style="color:white"></i>
+                            </button> 
+                        {% else %}
+                            <button class="btn btn-link">
+                                <i id="wish-{{ r.movie_id }}" class="far fa-bookmark fa-lg" style="color:white"></i>
+                            </button> 
+                        {% endif %}
+                    </form>
+                </section><!--버튼 section-->
+            </div>
+        </div>
+
+        {% endif %}
+    {% endfor %}
+
+
+</div>
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script>
+    const forms = document.querySelectorAll('#wish-form')
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+    forms.forEach(form => {
+        form.addEventListener('submit', function (event) {
+        event.preventDefault()
+        const movieId = event.target.dataset.id
+        axios.post(`http://127.0.0.1:8000/movies/${movieId}/wish/`, {}, {
+            headers:{'X-CSRFToken': csrftoken},
+        })
+        .then(function(response){
+            const wishedd = response.data.wished
+            
+            // 좋아요 버튼 찾아오고, 색 변경하기 
+            const wishColor = document.querySelector(`#wish-${movieId}`)
+            if (wishedd) {
+            wishColor.className = 'fas fa-bookmark fa-lg'
+            } else {
+            wishColor.className = 'far fa-bookmark fa-lg'
+            }
+        })
+        
+        // 로그인 안한 사용자 거르기 
+        .catch((err) => {
+            if (err.response.status === 401) {
+            window.location.href = '/accounts/login/'
+            }
+        })
+        })
+    })
+    const lforms = document.querySelectorAll('#like-form')
+    lforms.forEach (form => {
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+        form.addEventListener('submit', function (event) {
+        event.preventDefault()
+        const movieId = event.target.dataset.id
+        axios.post(`http://127.0.0.1:8000/movies/${movieId}/like/`, {}, {
+            headers:{'X-CSRFToken': csrftoken},
+        })
+        .then(function(response){
+            const likedd = response.data.liked
+            
+            // 좋아요 버튼 찾아오고, 색 변경하기 
+            const likeColor = document.querySelector(`#like-${movieId}`)
+            if (likedd) {
+            likeColor.className = 'fas fa-thumbs-up fa-lg'
+            } else {
+            likeColor.className = 'far fa-thumbs-up fa-lg'
+            }
+        })
+        
+        // 로그인 안한 사용자 거르기 
+        .catch((err) => {
+            if (err.response.status === 401) {
+            window.location.href = '/accounts/login/'
+            }
+        })
+        })
+    })
+  </script>
+
+{% comment %} {% endblock content %} {% endcomment %}
+{% endblock whole_first_recommend %}

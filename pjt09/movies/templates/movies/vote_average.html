@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+        .carousel-container2 {
+        margin: 10px auto;
+        min-height: 200px;
+        position: relative;
+        }
+        @media screen and (max-width: 768px) {
+        .carousel-container2 {
+            width: 80%;
+        }
+        }
+        @media screen and (max-width: 1024px) {
+        .carousel-container2 {
+            width: 85%;
+        }
+        }
+        .carousel-container2 .carousel-inner {
+        overflow: hidden;
+        }
+        .carousel-container2 .track2 {
+        display: inline-flex;
+        transition: transform 0.5s;
+        }
+        .carousel-container2 .card-container2 {
+        width: 259px;
+        flex-shrink: 0;
+        height: auto;
+        padding-right: 15px;
+        box-sizing: border-box;
+        }
+        .carousel-container2 .card-container2 .card {
+        width: 100%;
+        height: 100%;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        }
+        .nav button {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: 1px solid #aaa;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        }
+        .nav .prev2 {
+        left: -30px;
+        display: none;
+        }
+        .nav .prev2.show {
+        display: block;
+        }
+        .nav .next2 {
+        right: -30px;
+        }
+        .nav .next2.hide {
+        display: none;
+        }
+
+        .card > * {
+        flex: 1;
+        }
+        .card .img {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 30px;
+        }
+        .card .info {
+        flex-basis: 40px;
+        background: #333;
+        flex-grow: 0;
+        padding: 10px;
+        box-sizing: border-box;
+        border-bottom-right-radius: 0.5em 0.5em;
+        border-bottom-left-radius:  0.5em 0.5em;
+        }
+        #bigger .card {
+          transition: all 0.2s linear;
+        }
+        #bigger:hover .card {
+          transform: scale(1.01);
+        }
+    </style>
+</head>
+<body>
+    <div class="carousel-container2">
+        <div class="carousel-inner">
+          <div class="track2">
+          {% for movie in vote_average %}
+            <div class="card-container2" id="bigger">
+              <div class="card">
+                <a href="{% url 'movies:detail' movie.pk %}">
+                  <img height="350px" src="https://image.tmdb.org/t/p/w500/{{ movie.poster_path }}" class="card-img-top" alt="movie image">
+                </a>
+                <div class="card-body">
+                  <a href="{% url 'movies:detail' movie.pk %}" style="text-decoration:none; color:black;">
+                    <h5 class="card-title"><b>{{ movie.title }}</b></h5>
+                  </a>
+                    <p class="text-muted">{{ movie.original_title }}</p>
+                  <hr>
+                  <p class= "card-text" style="display:-webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow:hidden; text-overflow: ellipsis; word-wrap:break-word; line-height: 1.2em; height: 3.6em;">{{ movie.overview }}</p>
+                </div>
+                <div class="d-flex justify-content-between align-items-center info" style="background:lightgray;">
+                  <small class="float-start text-muted">{{ movie.release_date }}</small>
+                  {% comment %} 저장버튼 {% endcomment %}
+                  <form class="float-end" id="w-form" data-id="{{ movie.pk }}">
+                      {% csrf_token %}
+                      {% if user in movie.wish_users.all %}
+                          <button class="btn btn-link">
+                              <i id="w-{{ movie.pk }}" class="fas fa-bookmark fa-lg" style="color:black"></i>
+                          </button> 
+                      {% else %}
+                          <button class="btn btn-link">
+                              <i id="w-{{ movie.pk }}" class="far fa-bookmark fa-lg" style="color:black"></i>
+                          </button> 
+                      {% endif %}
+                  </form> 
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+          </div>
+        </div>
+        <div class="nav">
+          <button class="prev2">
+            <i class="material-icons">
+            keyboard_arrow_left
+            </i>
+          </button>
+          <button class="next2">
+            <i class="material-icons">
+            keyboard_arrow_right
+            </i>
+          </button>
+        </div>
+      </div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+const prev2  = document.querySelector('.prev2');
+const next2 = document.querySelector('.next2');
+
+const track2 = document.querySelector('.track2');
+
+let carouselWidth2 = document.querySelector('.carousel-container2').offsetWidth;
+
+window.addEventListener('resize', () => {
+  carouselWidth2 = document.querySelector('.carousel-container2').offsetWidth;
+})
+
+let index2 = 0;
+
+next2.addEventListener('click', () => {
+  index2++;
+  prev2.classList.add('show');
+  track2.style.transform = `translateX(-${index2 * carouselWidth2}px)`;
+  
+  if (track2.offsetWidth - (index2 * carouselWidth2) < carouselWidth2) {
+    next2.classList.add('hide');
+  }
+})
+
+prev2.addEventListener('click', () => {
+  index2--;
+  next2.classList.remove('hide');
+  if (index2 === 0) {
+    prev2.classList.remove('show');
+  }
+  track2.style.transform = `translateX(-${index2 * carouselWidth2}px)`;
+})
+
+
+//wish 저장
+    const wForms = document.querySelectorAll('#w-form')
+    wForms.forEach(function (form){
+      form.addEventListener('submit', function (event){
+        console.log(event)
+        event.preventDefault()
+        const csrftoken2 = document.querySelector('[name=csrfmiddlewaretoken]').value
+        console.log(csrftoken2)
+        const movieId2 = event.target.dataset.id
+        console.log(movieId2)
+        axios.post(`http://127.0.0.1:8000/movies/${movieId2}/wish/`, {}, {
+          headers:{'X-CSRFToken': csrftoken2},
+        })
+        .then(function(response){
+          console.log(response)
+          const wisheddd = response.data.wished
+          // 좋아요 버튼 찾아오고, 색 변경하기 
+          const wishColorr = document.querySelector(`#w-${movieId2}`)
+          if (wisheddd) {
+            wishColorr.className = 'fas fa-bookmark fa-lg'
+          } else {
+            wishColorr.className = 'far fa-bookmark fa-lg'
+          }
+        })
+        
+        // 로그인 안한 사용자 거르기 
+        .catch((err) => {
+          if (err.response.status === 401) {
+            window.location.href = '/accounts/login/'
+          }
+        })
+
+      })
+    })
+
+</script>
+
+</body>
+
+
+
+</html>

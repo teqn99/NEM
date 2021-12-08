@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Simple responsive owl carousel</title>
+	{% comment %} <link rel="stylesheet" type="text4/css" href="css/style.css"> {% endcomment %}
+	<style>
+	@import url('https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap');
+
+	@charset "utf-8";
+		*{
+			padding: 0;
+			margin: 0;
+			box-sizing: border-box;
+			{% comment %} font-family: -webkit-pictograph; {% endcomment %}
+			font-family: 'Poppins', sans-serif;
+		}
+		main4{
+			width: 100%;
+			height: 840px;
+			/*background: red;*/
+			margin: 10px auto;
+			position: relative;
+			padding: 5px 0;
+		}
+		main4 .text4{
+			padding: 10px;
+			text-align: center;
+			/*font-size: 30px;*/
+			color: #554;
+		}
+		.text4 h1{
+			font-size: 50px;
+		}
+		.text4 p{
+			width: 60%;
+			padding: 5px;
+			margin: auto;
+			line-height: 30px;
+		}
+		main4 header{
+			width: 98%;
+			height: 60px;
+			margin: 0 auto;
+			/*background: gray;*/
+			display: flex;
+			align-items: center;
+			padding: 20px;
+			justify-content: space-between;
+			border-bottom: 2px solid #ddd;
+		}
+		header p span4{
+			font-size: 40px;
+		    margin: 0 5px;
+		    cursor: pointer;
+		    color: #555;
+		     width: 30px;
+		    height: 30px;
+		    display: inline-block;
+		    line-height: 19px;
+		    text-align: center;
+		    border-radius: 3px;
+		}
+		header p span4:hover{
+			background: #222;
+    		color: white;
+		}
+		section4{
+			width: 98%;
+			height: 450px;
+			/*background: red;*/
+			margin: auto;
+			display: flex;
+			align-items: center;
+			overflow-x: auto;
+		}
+		section4::-webkit-scrollbar{
+			display: none;
+		}
+		section4 .product4{
+			{% comment %} min-width: 24%; {% endcomment %}
+			height: 90%;
+			
+			background: whitesmoke;
+			margin:  0 20px  0 0;
+			border-radius: 20px;
+			position: relative;
+			left: 0;
+			transition: 0.5s;
+
+		}
+		picture2{
+			width: 100%;
+			height: 70%;
+			padding: 20px;
+			/*background: green;*/
+			display: flex;
+			overflow: hidden;
+			margin: 0px;
+		}
+		picture2 img{
+			width: 100%;
+		}
+		.detail,
+		.button4{
+			width: 90%;
+			/*background: red;*/
+			margin: auto;
+			padding: 5px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			height: 50px;
+			font-size: 20px;
+			color: #444;
+		}
+		small{color: #555;}
+		a2{
+			text-decoration: none;
+			padding: 6px 14px;
+		    font-size: 15px;
+		    margin: 5px 0 0 20px;
+		    display: inline-block;
+		    background: #6773ff;
+		    color: white;
+		}
+		p.star{
+			margin: 5px auto;
+		    width: 65%;
+		    font-size: 25px;
+		    color: #808080;
+		}
+		@media (max-width: 768px) {
+			.text4 h1{
+				font-size: 35px;
+			}
+			.text4 p{
+				width: 90%;
+			}
+			header h1{
+				font-size: 25px;
+			}
+			header p span4{
+				font-size: 30px;
+			}
+			section4 .product4 {
+				{% comment %} min-width: 49%; {% endcomment %}
+				margin:  0 10px  0 0;
+			}
+			.detail, .button4{
+				font-size: 16px;
+			}
+			a2{
+				padding: 6px 10px;
+			}
+		}
+	</style>
+
+</head>
+<body>
+	<main4>
+		<div class="text4">
+			<h1>Directors</h1>
+		</div>
+		<header>
+			<h1>Directors List</h1>
+			<p>
+				<span4>&#139;</span4>
+				<span4>&#155;</span4>
+			</p>
+		</header>
+		
+		<section4>
+		{% for director in person.like_director.all %}
+			<div class="product4" style="height:auto">
+				<div class="detail d-flex justify-content-center">
+					<h4 class="mb-0 mt-3">{{ director.director_name }}</h4>
+				</div>
+				<picture2 style="width: 270px; height: 370px; margin-bottom: 0px; padding:15px; padding-bottom:0px;">
+					{% if director.profile_path == None %}
+						<img style="width:243px; height: 350px;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Noimage.svg/1479px-Noimage.svg.png" alt="No image">
+					{% else %}
+						<img style="width:243px; height: 350px; border-radius:7px;" src="https://image.tmdb.org/t/p/w500/{{ director.profile_path }}" alt="director profile"><br>
+					{% endif %}
+				</picture2>
+			</div>
+		{% endfor %}
+
+		</section4>
+	</main4>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+let span4 = document.getElementsByTagName('span4');
+	let product4 = document.getElementsByClassName('product4')
+	let product4_page = Math.ceil(product4.length/4);
+	let l_4 = 0;
+	let movePer4 = 25.34;
+	let maxMove4 = 1000;
+	// mobile_view	
+	let mob_view4 = window.matchMedia("(max-width: 768px)");
+	if (mob_view4.matches)
+	 {
+	 	movePer4 = 50.36;
+	 	maxMove4 = 1000;
+	 }
+
+	let right_mover4 = ()=>{
+		l_4 = l_4 + movePer4;
+		if (product4 == 1){l4 = 0; }
+		for(const i_4 of product4)
+		{
+			if (l_4 > maxMove4){l_4 = l_4 - movePer4;}
+			i_4.style.left = '-' + l_4 + '%';
+		}
+
+	}
+	let left_mover4 = ()=>{
+		l_4 = l_4 - movePer4;
+		if (l_4<=0){l_4 = 0;}
+		for(const i_4 of product4){
+			if (product4_page>=1){
+				i_4.style.left = '-' + l_4 + '%';
+			}
+		}
+	}
+	span4[1].onclick = ()=>{right_mover4();}
+	span4[0].onclick = ()=>{left_mover4();}
+
+</script>
+
+
+</body>
+</html>
+{% comment %} <script type="text4/javascript" src="js/main4.js"></script> {% endcomment %}
