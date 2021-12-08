@@ -178,9 +178,9 @@ python manage.py runserver
 
 11. 프로필 수정(accounts/profile_update.html)
 
-    ![프로필 수정](final_pjt_README.assets/프로필 수정.jpg)
+    ![image](final_pjt_README.assets/프로필 수정.jpg)
 
-    ![프로필 수정오나료](final_pjt_README.assets/프로필 수정오나료.jpg)
+    ![image](final_pjt_README.assets/프로필 수정오나료.jpg)
 
 
 
